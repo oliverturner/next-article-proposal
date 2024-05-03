@@ -1,0 +1,60 @@
+---
+import "../styles/article.css";
+import "../styles/demo.scss";
+
+type Props = {
+  title: string;
+};
+
+const pages = {
+  "/": "No Fullbleed",
+  "/fullbleed-short": "Fullbleed - Short",
+  "/fullbleed-long": "Fullbleed - Long",
+};
+
+const { title } = Astro.props;
+const currentPath = Astro.url.pathname;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="demo">
+      <slot />
+    </div>
+
+    <div class="demo-controls">
+      <nav>
+        <ul class="demo-controls__list">
+          {
+            Object.entries(pages).map(([path, label]) => {
+              return (
+                <li>
+                  <a class={path === currentPath ? "active" : ""} href={path}>
+                    {label}
+                  </a>
+                </li>
+              );
+            })
+          }
+        </ul>
+      </nav>
+      <div class="demo-controls__list">
+        <button data-click="toggleImages">Toggle image heights</button>
+        <button data-click="toggleZoom">Zoom out</button>
+      </div>
+    </div>
+
+    <script src="../demo/pg-slot.ts"></script>
+    <script src="../demo/lorem.ts"></script>
+    <script src="../demo/controls.ts"></script>
+
+    <script src="../client/index.ts"></script>
+  </body>
+</html>

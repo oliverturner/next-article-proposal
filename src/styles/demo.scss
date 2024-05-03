@@ -1,0 +1,311 @@
+@mixin stripes($stripe) {
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent 0,
+    transparent 1rem,
+    $stripe 0,
+    $stripe 2rem
+  );
+}
+
+@mixin label($label, $align: right) {
+  position: relative;
+
+  &::before,
+  &::after {
+    content: $label;
+    position: absolute;
+    right: 0;
+    padding: 0.25rem 0.5rem;
+    background: #fff7;
+  }
+
+  &::after {
+    bottom: 0;
+  }
+
+  @if $align == left {
+    &::before,
+    &::after {
+      right: auto;
+      left: 0;
+    }
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  object-fit: cover;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+//--------------------------------------------------
+.article {
+  isolation: isolate;
+  z-index: 1;
+}
+
+.article__content {
+  padding: var(--article-contentPadding);
+
+  & p {
+    margin: 0;
+  }
+
+  & p + p {
+    margin-block-start: 1rem;
+  }
+
+  & :not(p) {
+    margin-block: 1rem;
+  }
+
+  & img {
+    width: var(--grid-maxWidth);
+  }
+}
+
+.article__tools {
+  padding: var(--article-contentPadding);
+}
+
+.fullbleed {
+  --x: 0;
+
+  width: var(--grid-maxWidth);
+  transform: translateX(var(--x));
+
+  @media (min-width: 980px) {
+    --x: calc(var(--article-offsetLeft) * -1);
+
+    max-width: initial;
+  }
+}
+
+.fullwidth {
+  --x: 0;
+  --width: 100%;
+
+  width: var(--width);
+  transform: translateX(var(--x));
+
+  @media (min-width: 980px) {
+    --width: 100vw;
+    --x: calc(-50vw + (var(--grid-maxWidth) / 2) - var(--article-offsetLeft));
+
+    max-width: initial;
+  }
+}
+
+//--------------------------------------------------
+.demo--zoomed {
+  zoom: 0.4;
+}
+
+.demo-controls {
+  position: fixed;
+  bottom: 0;
+  z-index: 1;
+
+  & > * {
+    margin: 1rem;
+    padding: 1rem;
+    border: 1px solid #000;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 0.5rem #0003;
+    background: #fff;
+    z-index: 1;
+  }
+
+  & ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  & a,
+  & button {
+    display: block;
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    color: inherit;
+
+    transition: 0.25s background;
+
+    &:focus-visible,
+    &:hover,
+    &.active {
+      background: #eee;
+    }
+  }
+
+  & a {
+    text-decoration: none;
+  }
+
+  & button {
+    border: none;
+  }
+}
+
+.demo-controls__list {
+  display: grid;
+  gap: 0.5rem;
+}
+
+// Styling enhancements
+//--------------------------------------------------
+[data-reactroot] {
+  background: #eee;
+}
+
+.grid {
+  &[data-section="copy"] {
+    --bg: lightsteelblue;
+
+    .grid__content {
+      @include label("copy-content");
+    }
+    .grid__rhr {
+      @include label("copy-rhr");
+    }
+  }
+
+  &[data-section="onward"] {
+    --bg: lightsalmon;
+
+    .grid__content {
+      @include label("onward-content");
+    }
+    .grid__rhr {
+      @include label("onward-rhr");
+    }
+  }
+
+  &[data-section="comments"] {
+    --bg: thistle;
+
+    .grid__content {
+      @include label("comments-content");
+    }
+    .grid__rhr {
+      @include label("comments-rhr");
+    }
+  }
+}
+
+.grid__lhr {
+  @include label("lhr");
+  background: var(--bg);
+}
+
+.grid__content {
+  @include label("content");
+  background: var(--bg);
+}
+
+.grid__rhr {
+  @include label("rhr");
+  background: var(--bg);
+}
+
+.topper {
+  @include stripes(lightsteelblue);
+  @include label("topper");
+  aspect-ratio: 32/7;
+}
+
+.article__image {
+  @include stripes(#fff5);
+}
+
+.article__tools {
+  @include stripes(#fff5);
+}
+
+.onward {
+  @include stripes(#fff5);
+  @include label("teasers", left);
+  aspect-ratio: 3/2;
+}
+
+.concepts--content {
+  margin: auto;
+}
+
+coral-comments {
+  aspect-ratio: 9/24;
+  display: block;
+}
+
+pg-slot,
+concept-list {
+  display: block;
+  width: 300px;
+  aspect-ratio: 1;
+}
+
+pg-slot {
+  @include stripes(#fff6);
+  @include label("pg-slot", left);
+
+  display: grid;
+  place-content: center;
+
+  & span {
+    font-size: 2rem;
+    color: #0006;
+  }
+}
+
+concept-list {
+  @include stripes(#0006);
+  @include label("concepts", left);
+
+  .concepts--content & {
+    margin: auto;
+  }
+}
+
+.rhr-region {
+  --outline: red;
+  outline: 1px dashed var(--outline);
+
+  &.rhr-region--sufficient {
+    --outline: black;
+  }
+}
+
+.fullwidth {
+  display: grid;
+  place-content: center;
+
+  aspect-ratio: 16 / 3;
+
+  font-size: 2rem;
+  outline: 5px solid #0004;
+  outline-offset: -5px;
+  background: #ddd;
+  color: #888;
+
+  &::before {
+    content: "fullwidth";
+  }
+}

@@ -1,0 +1,50 @@
+---
+import Layout from "../layouts/base.astro";
+---
+
+<Layout title="Fullbleed">
+  <div data-reactroot data-article-type="full-width-graphics">
+    <div id="n-exponea-top-slot"></div>
+    <div class="topper"></div>
+
+    <section class="grid" data-section="copy">
+      <div class="grid__lhr">
+        <share-nav></share-nav>
+      </div>
+
+      <div class="grid__content article">
+        <div class="article__image"></div>
+        <div class="article__content" id="article-content">
+          <lorem-ipsum paras="1" replace></lorem-ipsum>
+          <img class="fullbleed" src="https://placehold.co/2000x400" />
+          <lorem-ipsum paras="2" replace></lorem-ipsum>
+          <img src="https://placehold.co/800x400" />
+          <lorem-ipsum paras="3" replace></lorem-ipsum>
+        </div>
+        <div class="article__tools">article tools</div>
+      </div>
+
+      <div class="grid__rhr" id="article-rhr">
+        <concept-list class="concepts concepts--rhr"></concept-list>
+      </div>
+    </section>
+
+    <section class="grid" data-section="onward">
+      <div class="grid__content meta">
+        <div class="onward"></div>
+        <div class="promoted"></div>
+        <concept-list class="concepts concepts--content"></concept-list>
+      </div>
+      <div class="grid__rhr" id="meta-rhr"></div>
+    </section>
+
+    <section class="grid" data-section="comments">
+      <div class="grid__content comments">
+        <div class="comments__content" id="comments-content">
+          <coral-comments></coral-comments>
+        </div>
+      </div>
+      <div class="grid__rhr" id="comments-rhr"></div>
+    </section>
+  </div>
+</Layout>
