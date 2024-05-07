@@ -246,10 +246,6 @@ button {
   aspect-ratio: 3/2;
 }
 
-.concepts--content {
-  margin: auto;
-}
-
 coral-comments {
   aspect-ratio: 9/24;
   display: block;
@@ -279,7 +275,7 @@ concept-list {
   @include stripes(#0006);
   @include label("concepts", left);
 
-  .concepts--content & {
+  .grid__content & {
     margin: auto;
   }
 }

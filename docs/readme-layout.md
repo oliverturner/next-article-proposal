@@ -38,7 +38,7 @@ The refactor achieves this by rendering the component in two places and showing 
     </div>
     <div class="grid__rhr">
       <!-- Shown on desktop unless there's fullbleed content -->
-      <div class="concepts concepts--rhr"></div>
+      <div class="concepts"></div>
     </div>
   </div>
 
@@ -46,7 +46,7 @@ The refactor achieves this by rendering the component in two places and showing 
     <div class="grid__content">
       <div class="onward"></div>
       <!-- Shown on mobile and on desktop when there's fullbleed content -->
-      <div class="concepts concepts--content"></div>
+      <div class="concepts"></div>
     </div>
     <div class="grid__rhr"></div>
   </div>
@@ -58,24 +58,24 @@ The refactor achieves this by rendering the component in two places and showing 
 </div>
 ```
 
-The CSS uses a "reverse selector" (the trailing `&`) to set `display` values when an ancestor's data-attribute value matches. This colocates the display logic within the component itself:
+The CSS uses a "reverse selector" (the trailing `&`) to set `display` values based on its location in the DOM and whether an ancestor's data-attribute value matches. This colocates the display logic within the component itself:
 
 ```scss
 .concepts {
-  &.concepts--content {
-    display: var(--_content, block);
-  }
-  &.concepts--rhr {
+  .grid__rhr & {
     display: var(--_rhr, none);
+  }
+  .grid__content & {
+    display: var(--_content, block);
   }
 
   @media (min-width: 980px) {
-    --_content: none;
     --_rhr: block;
+    --_content: none;
 
     [data-article-type="full-width-graphics"] & {
-      --_content: block;
       --_rhr: none;
+      --_content: block;
     }
   }
 }

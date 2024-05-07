@@ -68,10 +68,10 @@
 }
 
 .concepts {
-  &.concepts--rhr {
+  .grid__rhr & {
     display: var(--_rhr, none);
   }
-  &.concepts--content {
+  .grid__content & {
     display: var(--_content, block);
   }
 
