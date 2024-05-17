@@ -230,10 +230,18 @@ button {
   @include stripes(lightsteelblue);
   @include label("topper");
   aspect-ratio: 32/7;
+
+  .no-topper & {
+    display: none;
+  }
 }
 
 .article__image {
   @include stripes(#fff5);
+
+  .no-topper & {
+    aspect-ratio: 16/9;
+  }
 }
 
 .article__tools {

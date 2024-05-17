@@ -16,10 +16,12 @@ export class RightHandRail {
     this.#contentGroups = this.initContentGroups();
     this.#rhrRegions = this.initRhrRegions();
 
+    const rootEl = document.querySelector(":root")!;
     const contentElObserver = new ResizeObserver(
       this.onContentElResize.bind(this)
     );
     contentElObserver.observe(this.contentEl);
+    contentElObserver.observe(rootEl);
   }
 
   // Public API
@@ -108,7 +110,7 @@ export class RightHandRail {
   getContentGroupRects() {
     const contentTop = this.contentEl.getBoundingClientRect().top;
     const rhrTop = this.rhrEl.getBoundingClientRect().top;
-    const topDiff = contentTop - rhrTop;
+    const topDiff = rhrTop - contentTop;
     const offsetY = contentTop + topDiff;
 
     const rects = [];
