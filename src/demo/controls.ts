@@ -1,6 +1,10 @@
 function resizeImages() {
-  const elsA = document.querySelectorAll("[src='https://placehold.co/800x400']");
-  const elsB = document.querySelectorAll("[src='https://placehold.co/2000x400']");
+  const elsA = document.querySelectorAll(
+    "[src='https://placehold.co/800x400']"
+  );
+  const elsB = document.querySelectorAll(
+    "[src='https://placehold.co/2000x400']"
+  );
   let counter = 0;
 
   return () => {
@@ -14,7 +18,12 @@ function resizeImages() {
   };
 }
 
-function initControls({ toggleImgBtn, toggleZoomBtn, demoEl }: Record<string, Element>) {
+function initControls({
+  toggleTopperBtn,
+  toggleImgBtn,
+  toggleZoomBtn,
+  demoEl,
+}: Record<string, Element>) {
   const onResize = resizeImages();
   toggleImgBtn?.addEventListener("click", onResize);
 
@@ -22,10 +31,15 @@ function initControls({ toggleImgBtn, toggleZoomBtn, demoEl }: Record<string, El
     const zoomed = demoEl?.classList.toggle("demo--zoomed");
     toggleZoomBtn.textContent = zoomed ? "Zoom In" : "Zoom Out";
   });
+
+  toggleTopperBtn?.addEventListener("click", () => {
+    document.body.classList.toggle("no-topper");
+  });
 }
 
 initControls({
   demoEl: document.querySelector(".demo")!,
+  toggleTopperBtn: document.querySelector("[data-click='toggleTopper']")!,
   toggleImgBtn: document.querySelector("[data-click='toggleImages']")!,
   toggleZoomBtn: document.querySelector("[data-click='toggleZoom']")!,
 });
