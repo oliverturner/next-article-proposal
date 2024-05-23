@@ -91,7 +91,8 @@
   left: 0;
   width: 100%;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+  display: grid;
+
+  /* 1080px is fixed size of pg slots */
+  grid-template-rows: repeat(auto-fill, 1080px);
 }
