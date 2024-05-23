@@ -46,6 +46,13 @@ const currentPath = Astro.url.pathname;
         </ul>
       </nav>
       <div class="demo-controls__list">
+        <button data-click="toggleGridFlex">Toggle region grid/flex</button>
+        <button data-click="insertNewItem">Insert new item</button>
+        <button data-click="increaseInitialItems">
+          Initial items: <span class="demo-controls__num-items">?</span>
+        </button>
+      </div>
+      <div class="demo-controls__list">
         <button data-click="toggleTopper">Toggle topper / Main image</button>
         <button data-click="toggleImages">Toggle image heights</button>
         <button data-click="toggleZoom">Zoom out</button>
@@ -55,7 +62,6 @@ const currentPath = Astro.url.pathname;
     <script src="../demo/pg-slot.ts"></script>
     <script src="../demo/lorem.ts"></script>
     <script src="../demo/controls.ts"></script>
-
     <script src="../client/index.ts"></script>
   </body>
 </html>

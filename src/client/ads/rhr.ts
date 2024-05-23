@@ -20,6 +20,7 @@ export class RightHandRail {
     const contentElObserver = new ResizeObserver(
       this.onContentElResize.bind(this)
     );
+
     contentElObserver.observe(this.contentEl);
     contentElObserver.observe(rootEl);
   }
@@ -45,6 +46,20 @@ export class RightHandRail {
         region.appendChild(item);
       }
     }
+  }
+
+  appendItem(item: Element) {
+    for (const region of this.#rhrRegions) {
+      const regionHeight = region.getBoundingClientRect().height;
+      const regionMax = Math.floor(regionHeight / this.minRegionHeight);
+
+      if (region.children.length < regionMax) {
+        region.appendChild(item);
+        return true;
+      }
+    }
+
+    return false;
   }
 
   get isIntersected() {
@@ -139,7 +154,7 @@ export class RightHandRail {
     const regionEls = [];
     for (const { top, height } of rects) {
       const regionEl = document.createElement("div");
-      regionEl.className = "rhr-region";
+      regionEl.className = "rhr-region rhr-region-flex";
       regionEl.style.top = `${top}px`;
       regionEl.style.height = `${height}px`;
 

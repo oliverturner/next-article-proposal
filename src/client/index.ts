@@ -37,8 +37,13 @@ function runDemo() {
     const articleRhrEl = document.querySelector("#article-rhr")!;
     const conceptListEl = articleRhrEl.querySelector<HTMLElement>(".concepts")!;
 
+    const numSlots = parseInt(new URLSearchParams(document.location.search).get("numItems") ?? "2");
+
     const articleRhr = new RightHandRail(articleContentEl, articleRhrEl);
-    const items = configureSlots(createSlots(4), articleRhr.isIntersected);
+    const items = configureSlots(createSlots(numSlots), articleRhr.isIntersected);
+
+    // @ts-ignore
+    window.articleRhr = articleRhr;
 
     // If there's no fullbleed content then add the desktop Concept List
     // into the items to be placed in the RHR
@@ -56,6 +61,7 @@ function runDemo() {
     // Here we place the slots that didn't fit `articleRhr` into `commentsRhr`
     // We also update them to allow 600px MPUs: `commentsRhr.isIntersected` is false
     commentsRhr.placeItems(configureSlots(items, commentsRhr.isIntersected));
+
   } catch (err) {
     console.error(err);
   }

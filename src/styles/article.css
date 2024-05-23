@@ -71,6 +71,7 @@
   .grid__rhr & {
     display: var(--_rhr, none);
   }
+
   .grid__content & {
     display: var(--_content, block);
   }
@@ -90,9 +91,16 @@
   position: absolute;
   left: 0;
   width: 100%;
+}
 
+.rhr-region-flex {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.rhr-region-grid {
   display: grid;
-
   /* 1080px is fixed size of pg slots */
   grid-template-rows: repeat(auto-fill, 1080px);
 }
