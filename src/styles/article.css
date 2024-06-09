@@ -93,5 +93,9 @@
 
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
+
+  & pg-slot:last-child {
+    margin-bottom: 300px;
+  }
 }

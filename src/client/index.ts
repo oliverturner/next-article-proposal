@@ -13,11 +13,34 @@ function createSlots(length: number) {
  * We're able to configure RHR slots based on `isFullWidth`
  * Here `rhr-fullbleed` omits 600px tall slots
  */
-function configureSlots(slots: HTMLElement[], isFullWidth: boolean) {
+function configureSlots(slots: HTMLElement[], isFullWidth = false) {
   for (const slot of slots) {
     slot.dataset.configKey = isFullWidth ? "rhr-fullbleed" : "rhr";
   }
   return slots;
+}
+
+function runOtherCode() {
+  const getItem = () => {
+    const el = document.createElement("div");
+    el.className = "custom-widget";
+    return el;
+  };
+
+  const insertItem = (rhr: RightHandRail) => {
+    rhr.placeItem({
+      item: getItem(),
+      requiredH: 300,
+      placement: "top",
+    });
+  };
+
+  const articleRhrEl = document.querySelector<
+    Element & { cmd?: ((rhr: RightHandRail) => void)[] }
+  >("#article-rhr")!;
+
+  articleRhrEl.cmd ??= [insertItem];
+  articleRhrEl.cmd.push(insertItem);
 }
 
 /**
@@ -37,28 +60,34 @@ function runDemo() {
     const articleRhrEl = document.querySelector("#article-rhr")!;
     const conceptListEl = articleRhrEl.querySelector<HTMLElement>(".concepts")!;
 
-    const articleRhr = new RightHandRail(articleContentEl, articleRhrEl);
-    const items = configureSlots(createSlots(4), articleRhr.isIntersected);
+    const articleRhr = new RightHandRail("article", {
+      groupsEl: articleContentEl,
+      rhrEl: articleRhrEl,
+    });
+    const slotEls = configureSlots(createSlots(4), articleRhr.isIntersected);
 
     // If there's no fullbleed content then add the desktop Concept List
     // into the items to be placed in the RHR
     if (articleRhr.isIntersected === false) {
-      items.splice(1, 0, conceptListEl);
+      slotEls.splice(1, 0, conceptListEl);
     }
-    articleRhr.placeItems(items);
+    articleRhr.placeSlots(slotEls);
 
     // The RightHandRail component supports multiple instances
-    const commentsRhr = new RightHandRail(
-      document.querySelector("#comments-content")!,
-      document.querySelector("#comments-rhr")!
-    );
+    const commentsRhr = new RightHandRail("comments", {
+      groupsEl: document.querySelector("#comments-content")!,
+      rhrEl: document.querySelector("#comments-rhr")!,
+    });
 
     // Here we place the slots that didn't fit `articleRhr` into `commentsRhr`
     // We also update them to allow 600px MPUs: `commentsRhr.isIntersected` is false
-    commentsRhr.placeItems(configureSlots(items, commentsRhr.isIntersected));
+    commentsRhr.placeSlots(configureSlots(slotEls));
   } catch (err) {
     console.error(err);
   }
 }
 
-onDomReady.then(runDemo);
+onDomReady.then(() => {
+  runOtherCode();
+  runDemo();
+});

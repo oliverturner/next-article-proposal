@@ -313,3 +313,10 @@ concept-list {
     content: "fullwidth";
   }
 }
+
+.custom-widget {
+  @include stripes(mediumseagreen);
+  @include label("widget");
+
+  height: 300px;
+}
