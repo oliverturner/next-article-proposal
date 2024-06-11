@@ -1,5 +1,6 @@
 ---
-import Layout from "../layouts/base.astro";
+import ShareNav from "../server/components/share-nav.astro";
+import Layout from "../server/layouts/base.astro";
 ---
 
 <Layout title="Fullbleed">
@@ -9,7 +10,7 @@ import Layout from "../layouts/base.astro";
 
     <section class="grid" data-section="copy">
       <div class="grid__lhr">
-        <share-nav></share-nav>
+        <ShareNav />
       </div>
 
       <div class="grid__content article">

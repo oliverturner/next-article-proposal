@@ -1,5 +1,5 @@
 import { onDomReady } from "./utils/dom-ready";
-import { RightHandRail, type RHRElement } from "./ads/rhr";
+import { RightHandRail, type RHRElement } from "./components/ads/rhr";
 
 function createSlots(length: number) {
   return Array.from({ length }, (_, i) => {
