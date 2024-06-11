@@ -288,6 +288,15 @@ concept-list {
   }
 }
 
+pro-widget {
+  @include stripes(lightgreen);
+  @include label("pro widget", left);
+
+  display: block;
+  width: 300px;
+  height: 500px;
+}
+
 .rhr-region {
   --outline: red;
   outline: 1px dashed var(--outline);
