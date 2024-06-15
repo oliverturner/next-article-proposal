@@ -1,0 +1,44 @@
+<div>
+  <ul id="share-nav">
+    <li>a</li>
+    <li>b</li>
+    <li>c</li>
+    <li>d</li>
+    <li>e</li>
+    <li>f</li>
+  </ul>
+</div>
+
+<style>
+  ul {
+    --opacity: 1;
+
+    position: sticky;
+    top: 50px;
+
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    opacity: var(--opacity);
+
+    transition: opacity 0.2s;
+
+    &[data-is-overlapped="true"] {
+      --opacity: 0;
+    }
+  }
+
+  li {
+    --bg: lemonchiffon;
+
+    display: grid;
+    place-content: center;
+
+    aspect-ratio: 1;
+    background-color: var(--bg);
+
+    &:nth-child(odd) {
+      --bg: lightcoral;
+    }
+  }
+</style>

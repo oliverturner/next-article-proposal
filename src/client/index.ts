@@ -1,5 +1,6 @@
 import { onDomReady } from "./utils/dom-ready";
 import { RightHandRail, type RHRElement } from "./components/ads/rhr";
+import { ShareNav } from "./components/share-nav";
 
 function createSlots(length: number) {
   return Array.from({ length }, (_, i) => {
@@ -89,6 +90,11 @@ onDomReady.then(() => {
   insertProWidget(articleRhrEl, "middle");
 
   initRhrInstances();
+
+  new ShareNav(
+    document.querySelector("#share-nav")!,
+    document.querySelector("#article-content")!
+  );
 
   // Commands can be run post-initialisation too
   setTimeout(() => insertProWidget(articleRhrEl, "bottom"), 5000);
