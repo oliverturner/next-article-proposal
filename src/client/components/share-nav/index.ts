@@ -33,7 +33,7 @@ export class ShareNav {
    * its sticky state.
    *
    * Whenever the state changes, create a new fullbleed observer
-   * using the nav's pre-calculated dimensions
+   * using the applicable pre-calculated rootMargin.
    */
   createNavObserver() {
     this.navObserver?.disconnect();
