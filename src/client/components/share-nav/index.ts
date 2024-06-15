@@ -1,98 +1,96 @@
 import { debounce } from "../../utils/events";
+import { getFullbleedEls, getRootMargins } from "./utils";
+
+export const NAV_STICKY_TOP = 80;
+export const FULLBLEED_MARGIN = 40;
 
 export class ShareNav {
-  static NAV_STICKY_TOP = 50;
-
   navEl: HTMLElement;
   contentEl: Element;
+
   fullbleedEls: Element[];
-  navObserver: IntersectionObserver;
   fullbleedObserver: IntersectionObserver | null = null;
-  counter = 0;
+  navObserver: IntersectionObserver;
 
   constructor(navEl: HTMLElement, contentEl: Element) {
     this.navEl = navEl;
     this.contentEl = contentEl;
-    this.fullbleedEls = this.getFullbleedEls();
-    this.navObserver = this.createNavObserver();
 
-    // Ensure that the nav's top property matches the sticky top value
-    this.navEl.style.top = `${ShareNav.NAV_STICKY_TOP}px`;
+    /**
+     * Ensure consistency of the sticky top value
+     * This overrides any value that may have been set in CSS
+     */
+    this.navEl.style.top = `${NAV_STICKY_TOP}px`;
+
+    this.fullbleedEls = getFullbleedEls(this.contentEl);
+    this.navObserver = this.createNavObserver();
 
     window.addEventListener("resize", debounce(this.onResize, 100));
   }
 
-  getFullbleedEls() {
-    const fullbleedEls = [];
-    const maxWidth = this.contentEl.getBoundingClientRect().width;
-    for (const child of this.contentEl.children) {
-      if (child.getBoundingClientRect().width > maxWidth) {
-        fullbleedEls.push(child);
-      }
-    }
-
-    return fullbleedEls;
-  }
-
   /**
-   * Create an observer to detect when this.navEl enters its sticky state.
+   * Create an observer to detect when this.navEl enters or leaves
+   * its sticky state.
    *
-   * Whenever the state changes, create a new observer of fullbleed
-   * elements using the nav's current dimensions to determine when the nav
-   * is overlapped
+   * Whenever the state changes, create a new fullbleed observer
+   * using the nav's pre-calculated dimensions
    */
   createNavObserver() {
     this.navObserver?.disconnect();
-    const observer = new IntersectionObserver(this.onNavIntersect, {
-      rootMargin: this.shareNavRootMargin,
-      threshold: 1,
+
+    /**
+     * Pre-calculate root margins for nav and fullbleed elements
+     * in both static and sticky states
+     */
+    const rootMargins = getRootMargins(this.navEl.getBoundingClientRect());
+
+    const onNavIntersect = (entries: IntersectionObserverEntry[]) => {
+      const isSticky = entries[0].isIntersecting;
+      const rootMargin = isSticky
+        ? rootMargins.fullbleedSticky
+        : rootMargins.fullbleedStatic;
+
+      this.fullbleedObserver = this.createFullbleedObserver(rootMargin);
+    };
+
+    const observer = new IntersectionObserver(onNavIntersect, {
+      rootMargin: rootMargins.navSticky,
+      threshold: 0.9, // this _appears_ to be required in Safari?
     });
+
     observer.observe(this.navEl);
 
     return observer;
   }
 
-  createFullbleedObserver() {
+  createFullbleedObserver(rootMargin: string) {
     this.fullbleedObserver?.disconnect();
 
-    const observer = new IntersectionObserver(this.onFullbleedIntersect, {
-      rootMargin: this.shareNavRootMargin,
+    const onFullbleedIntersect = (entries: IntersectionObserverEntry[]) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          return (this.navEl.dataset.isOverlapped = "true");
+        }
+      }
+
+      this.navEl.dataset.isOverlapped = "false";
+    };
+
+    const observer = new IntersectionObserver(onFullbleedIntersect, {
+      rootMargin,
     });
 
     for (const el of this.fullbleedEls) {
       observer.observe(el);
     }
 
-    console.log("createFullbleedObserver", this.counter++);
-
     return observer;
-  }
-
-  // Accessors
-  //------------------------------------------------------------------------------------------------
-  get shareNavRootMargin() {
-    const initialNavRect = this.navEl.getBoundingClientRect();
-    const viewportH = window.innerHeight;
-    const top = ShareNav.NAV_STICKY_TOP;
-    const bottom = top + initialNavRect.height + top - viewportH;
-
-    return `${top}px 0px ${bottom}px 0px`;
   }
 
   // Event handlers
   //------------------------------------------------------------------------------------------------
-  onNavIntersect = () => {
-    this.fullbleedObserver = this.createFullbleedObserver();
-  };
-
-  onFullbleedIntersect = (entries: IntersectionObserverEntry[]) => {
-    for (const entry of entries) {
-      this.navEl.dataset.isOverlapped = entry.isIntersecting ? "true" : "false";
-    }
-  };
-
   onResize = () => {
-    this.fullbleedEls = this.getFullbleedEls();
+    this.fullbleedEls = getFullbleedEls(this.contentEl);
     this.navObserver = this.createNavObserver();
   };
 }
