@@ -45,7 +45,7 @@ export class ShareNav {
     this.navObserver?.disconnect();
     const observer = new IntersectionObserver(this.onNavIntersect, {
       rootMargin: this.shareNavRootMargin,
-      threshold: 1,
+      threshold: 0.999,
     });
     observer.observe(this.navEl);
 
@@ -87,8 +87,12 @@ export class ShareNav {
 
   onFullbleedIntersect = (entries: IntersectionObserverEntry[]) => {
     for (const entry of entries) {
-      this.navEl.dataset.isOverlapped = entry.isIntersecting ? "true" : "false";
+      if (entry.isIntersecting) {
+        return (this.navEl.dataset.isOverlapped = "true");
+      }
     }
+
+    this.navEl.dataset.isOverlapped = "false";
   };
 
   onResize = () => {
